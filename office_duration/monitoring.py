@@ -32,12 +32,13 @@ def compute_metrics(
     from lifelines import WeibullAFTFitter
     from office_duration.model import predict_durations
 
-    run_id = run_id or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    run_id = run_id or now_iso
 
     metrics: dict = {
         "run_id": run_id,
         "label": label or run_id,
-        "timestamp": run_id,
+        "timestamp": now_iso,  # always ISO-formatted; independent of run_id
         "n_sessions": int(len(sessions)),
         "n_censored": int(sessions["censored"].sum()),
         "censoring_rate": float(sessions["censored"].mean()),

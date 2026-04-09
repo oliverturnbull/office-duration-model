@@ -9,8 +9,9 @@ import pandas as pd
 def generate_dashboard(
     metrics_path: str = "monitoring/metrics.jsonl",
     output_path: str = "monitoring/dashboard.html",
+    embed_plotly: bool = False,
 ) -> str:
-    """Generate a self-contained HTML monitoring dashboard.
+    """Generate an HTML monitoring dashboard.
 
     Reads historical metrics from *metrics_path* and writes a Plotly-based
     HTML page to *output_path*.
@@ -19,6 +20,9 @@ def generate_dashboard(
     ----------
     metrics_path : Path to the JSONL file written by ``save_metrics``.
     output_path : Destination path for the HTML dashboard.
+    embed_plotly : If True, bundle the Plotly JS library directly into the
+        HTML file (fully self-contained, ~3 MB larger, works offline).
+        If False (default), load Plotly from the CDN at viewing time.
 
     Returns
     -------
@@ -206,5 +210,5 @@ def generate_dashboard(
     if dirpart:
         os.makedirs(dirpart, exist_ok=True)
 
-    fig.write_html(output_path, include_plotlyjs="cdn")
+    fig.write_html(output_path, include_plotlyjs=True if embed_plotly else "cdn")
     return os.path.abspath(output_path)

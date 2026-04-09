@@ -111,12 +111,20 @@ def main():
         print(f"  Metrics appended to {args.metrics_path}")
 
     if args.dashboard:
-        from office_duration.dashboard import generate_dashboard
+        try:
+            from office_duration.dashboard import generate_dashboard
+        except ImportError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            sys.exit(1)
         print(f"\nGenerating monitoring dashboard...")
-        out = generate_dashboard(
-            metrics_path=args.metrics_path,
-            output_path=args.dashboard_path,
-        )
+        try:
+            out = generate_dashboard(
+                metrics_path=args.metrics_path,
+                output_path=args.dashboard_path,
+            )
+        except ImportError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            sys.exit(1)
         print(f"  Dashboard written to {out}")
 
 
