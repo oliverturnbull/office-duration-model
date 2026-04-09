@@ -3,4 +3,5 @@ __pycache__/
 *.egg-info/
 data/*.csv
 results.csv
+monitoring/
 .venv/
